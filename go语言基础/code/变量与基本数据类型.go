@@ -85,14 +85,50 @@ func main() {
 	//fmt.Printf("%c\n", r)  // 你
 	//fmt.Printf("%d\n", r)  // 20320 Unicode编码
 
-	var s1 string
-	var s2 string
-	fmt.Println(s1) // 字符串默认值'\0'
-	fmt.Println(s2) // 字符串默认值'\0'
+	//var s1 string
+	//var s2 string
+	//fmt.Println(s1) // 字符串默认值'\0'
+	//fmt.Println(s2) // 字符串默认值'\0'
+	//
+	//s1 = "你好，"
+	//s2 = "世界！"
+	//fmt.Println(s1, s2)
+	//
+	//fmt.Println(s1 + s2) // 字符串拼接
 
-	s1 = "你好，"
-	s2 = "世界！"
-	fmt.Println(s1, s2)
+	//var str string = "hello\000world"
+	//fmt.Printf("%s, %d", str, len(str))
+	//a := 0b11101
+	//b := 0763
+	//c := 10
+	//d := 0x123
+	//fmt.Println(a, b, c, d)
 
-	fmt.Println(s1 + s2) // 字符串拼接
+	//fmt.Println("hello")  // 字面常量
+	//
+	//const MAX int = 100  // 定义一个常量
+	////MAX = 10 // error
+
+	//const(
+	//	a=1 // iota=0  // iota初始化为0
+	//	b=iota  // iota = 1
+	//	c=iota  // iota = 2  c = 2
+	//	f int = 10  // iota = 3
+	//	e  // e = 10  iota = 4
+	//	g  // g = 10  iota = 5
+	//	k = iota  // iota = 6
+	//	l   // iota = 7  l=iota
+	//)
+	//fmt.Println(a, b, c, e, g, l)
+	//const d int = iota  // iota被初始化为0
+	//fmt.Println(d)
+	const (
+		a = iota // iota = 0
+		b
+		c
+		d                 // iota=1 2 3
+		e, f = iota, iota // iota = 4
+	)
+	fmt.Println(a, b, c, d, e, f)
+
 }
