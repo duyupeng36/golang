@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
 	//a := 10
@@ -108,23 +106,133 @@ func main() {
 	//	fmt.Println("你必须努力了")
 	//}
 
-	var score int32
-	fmt.Println("输入成绩")
-	fmt.Scanf("%d", &score)
-	if score == 100 {
-		// 90~100属于一个评级
-		score = 90
+	//var score int32
+	//fmt.Println("输入成绩")
+	//fmt.Scanf("%d", &score)
+	//if score == 100 {
+	//	// 90~100属于一个评级
+	//	score = 90
+	//}
+	//switch score / 10 {
+	//case 9:
+	//	fmt.Println("A")
+	//case 8:
+	//	fmt.Println("B")
+	//case 7:
+	//	fmt.Println("C")
+	//case 6:
+	//	fmt.Println("D")
+	//default:
+	//	fmt.Println("E")
+	//}
+
+	//var i int32 =  0
+	//for ; i <= 100; {
+	//	if i % 2 != 0{
+	//		fmt.Printf("奇数: %d ", i)
+	//	}
+	//	i++
+	//}
+	//fmt.Printf("\n")
+
+	//for i:=100; i < 1000; i++ {
+	//	hundred := i / 100   // 百位
+	//	ten := (i % 100) / 10  // 十位
+	//	one := i % 10  // 各位
+	//
+	//	if hundred * hundred * hundred + ten * ten * ten + one * one * one == i {
+	//		fmt.Printf("%d是水仙花数\n", i)
+	//}
+	//}
+	//
+	//for i:=7; i<=97; i++ {
+	//	if i % 7 == 0 || i / 10 == 7 || i % 10 == 7 {
+	//		// 7的倍数    十位是7          个位是7
+	//		fmt.Printf("%d ", i)
+	//}
+	//}
+
+	//// 打印输出九九乘法表
+	//for i:=1; i < 10; i++ {
+	//	for j:=1; j < i+1; j++ {
+	//		fmt.Printf("%d * %d = %d\t", i, j, i * j)
+	//	}
+	//	fmt.Printf("\n")
+	//}
+	//fmt.Printf("\n")
+	//// 镜像打印九九乘法表
+	//for i:=9; i > 0; i-- {
+	//	for j:=1; j < i+1; j++ {
+	//		fmt.Printf("%d * %d = %d\t", i, j, i * j)
+	//	}
+	//	fmt.Printf("\n")
+	//}
+
+	//for i:=0; i < 10; i++ {
+	//	fmt.Printf("%d ", i)
+	//	if i == 5 {
+	//		break  // 跳出循环
+	//	}
+	//}
+	//fmt.Printf("\n")
+	//
+	//BREAKDEMO1:
+	//	for i := 0; i < 10; i++ {
+	//		for j := 0; j < 10; j++ {
+	//			if j == 2 {
+	//				break BREAKDEMO1  // 跳出标签指定的语句
+	//			}
+	//			fmt.Printf("%v-%v\n", i, j)
+	//		}
+	//	}
+	//	fmt.Println("...")
+
+	//for i:=0; i < 10; i++ {
+	//	if i % 2 != 0 {
+	//		continue
+	//	}
+	//	fmt.Printf("%d ", i)
+	//}
+
+	//forloop1:
+	//	for i := 0; i < 5; i++ {
+	//		//forloop2:
+	//		for j := 0; j < 5; j++ {
+	//			if i == 2 || j == 2 {
+	//				continue forloop1
+	//			}
+	//			fmt.Printf("%v-%v\n", i, j)
+	//		}
+	//	}
+
+	var breakFlag bool
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				breakFlag = true
+				break
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+		// 外层for循环判断
+		if breakFlag {
+			break
+		}
 	}
-	switch score / 10 {
-	case 9:
-		fmt.Println("A")
-	case 8:
-		fmt.Println("B")
-	case 7:
-		fmt.Println("C")
-	case 6:
-		fmt.Println("D")
-	default:
-		fmt.Println("E")
+
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				goto breakTag
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
 	}
+	return
+	// 标签
+breakTag:
+	fmt.Println("结束for循环")
+
 }
