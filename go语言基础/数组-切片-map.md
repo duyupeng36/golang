@@ -1,4 +1,4 @@
-# 一 数组
+# 一 数组(array)
 
 数组是同一种数据类型元素的集合。在`Go`语言中，数组从声明时就确定，
 使用时可以修改数组成员，但是数组大小不可变化
@@ -277,9 +277,310 @@ func main()  {
 }
 ```
 
-# 二 切片
+# 二 切片(slice)
+因为数组的长度是固定的并且数组长度属于类型的一部分，所以数组有很多的局限性
+```go
+package main
+func arraySum(x [3]int) int{
+    sum := 0
+    for _, v := range x{
+        sum = sum + v
+    }
+    return sum
+}
+```
+* 该函数的参数`x`是`[3]int`类型的变量，对于其他的类型不能传递到函数中
 
+另外
+```
+a := [3]int{1, 2, 3}
+```
+* 数组变量`a`已经保存了3个元素，不能在增加元素了
 
+为此，go语言引入了切片来解决这些问题。
+
+切片（Slice）是一个拥有**相同类型元素的可变长度的序列**。
+它是**基于数组类型做的一层封装**。它非常灵活，支持**自动扩容**
+
+**切片是一个 *引用类型*，它的内部结构包含`地址`、`长度`和`容量`。
+切片一般用于快速地操作一块数据集合**
+
+## 2.1 声明切片
+声明切片类型的基本语法如下: 
+```
+var 切片名 [] 数据类型
+```
+## 2.2 切片初始化
+```
+var 切片名 = []数据类型{初始化列表}
+```
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var slice = []int{1,2,3,4}
+	fmt.Println(slice)  // [1 2 3 4]
+	var slice2 = []string{"北京", "上海", "沙河"}
+	fmt.Println(slice2)  // [北京 上海 沙河]
+}
+```
+
+## 2.3 引用类型
+切片是引用类型，不支持直接比较，只能和`nil`比较
+
+在`golang`中`nil`代表了`pointer`, `channel`, `func`, `interface`, `map` 
+或者 `slice` 的零值，类似与`c`语言中的空指针.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s1 [] int   // 声明一个切片
+	fmt.Println(s1 == nil)  // true
+	// 在golang中nil代表了pointer, channel, func, interface, map 或者 slice 的零值，类似与c语言中的空指针.
+	var s2 = []int{1,2,3,4}
+	fmt.Println(s2 == nil)  //false
+}
+```
+
+## 2.4 切片长度和容量
+
+切片拥有自己的长度和容量，
+* 长度: **切片保存的数据的个数**
+* 容量: **底层数组的长度 - 切片第一个元素在底层数组中的位置**
+
+我们可以通过使用内置的`len()`函数求长度，使用内置的`cap()`函数求切片的容量
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s1 [] int
+	fmt.Println(len(s1), cap(s1))  // 0 0
+	var s2 = []int{1,2,3,4}
+	fmt.Println(len(s2), cap(s2))  // 4 4
+}
+```
+
+## 2.5 切片表达式
+切片表达式从`字符串`、`数组`、`指向数组或切片的指针`构造子字符串或切片。
+它有两种变体：一种指定`low`和`high`两个索引界限值的简单的形式，
+另一种是除了`low`和`high`索引界限值外还指定**容量**的完整的形式。
+
+### 简单切片表达式
+切片的**底层就是一个数组**，所以我们可以基于数组通过切片表达式得到切片
+
+切片表达式中的`low`和`high`表示一个索引范围(左包含，右不包含)，
+也就是下面代码中从数组`a`中选出`1<=索引值<4`的元素组成切片`s`，
+得到的切片`长度=high-low`，**容量等于得到的切片的底层数组的容量**
+
+**从数组得到切片**
+```
+数组名[low:high]
+```
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// 由数组得到切片
+	var array = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	s1 := array[0:8]
+	fmt.Printf("s1:%v,type(s1): %T, len(s1): %d, cap(s1): %d", s1, s1, len(s1), cap(s1))// s1:[1 2 3 4 5 6 7 8],type(s1): []int, len(s1): 8, cap(s1): 10
+	
+}
+```
+
+可以**省略**切片表达式中的任何**索引**。省略了`low`则默认为`0`；
+省略了`high`则默认为**切片操作数数组的长**
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// 由数组得到切片
+	var array = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	s1 := array[0:8]
+	fmt.Printf("s1:%v,type(s1): %T, len(s1): %d, cap(s1): %d\n", s1, s1, len(s1), cap(s1))// s1:[1 2 3 4 5 6 7 8],type(s1): []int, len(s1): 8, cap(s1): 10
+
+	s2 := array[:5]
+	s3 := array[5:]
+	s4 := array[:]
+	fmt.Println(s2)  // [1 2 3 4 5]
+	fmt.Println(s3)  // [1 2 3 4 5]
+	fmt.Println(s4)  // [1 2 3 4 5 6 7 8 9 10]
+}
+```
+
+> **注意**
+> 1. 对于数组或字符串，如果`0 <= low <= high <= len(a)`，则索引合法，
+> 否则就会索引越界
+
+**从切片得到切片**
+```
+切片名[low:high]
+```
+对**切片再执行切片表达式**时（切片再切片），`high`的上限边界是切片的容量`cap(a)`，
+而不是长度`len(a)`。**常量索引**必须是**非负**的，并且可以用`int`类型的值表示;
+对于数组或常量字符串，常量索引也必须在有效范围内。如果`low`和`high`两个指标都是
+常数，它们必须满足`low <= high`。如果索引在运行时超出范围，
+就会发生运行时`panic`。
+
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var array = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	slice := array[:5]
+
+	s1 := slice[3: 5]  // s1的容量是底层数组array的长度减去s1的
+	fmt.Printf("s1: %v, cap(s1): %d\n", s1, cap(s1))  // s1: [4 5], cap(s1): 7
+
+	slice = array[5:]
+	//s2 := slice[:6]  // out of range
+	s2 := slice[:5]
+	fmt.Printf("s2: %v, cap(s2): %d", s2, cap(s2))  // s2: [6 7 8 9 10], cap(s2): 5
+}
+```
+
+### 完整切片表达式
+
+对于`数组`，`指向数组的指针`，或`切片`(注意 *不能是字符串*)支持完整切片表达式
+```
+变量名[low:high:max]
+```
+上面的代码会构造与简单切片表达式`变量名[low: high]`相同类型、相同长度和元素的切片。 
+另外，它会将得到的结果切片的**容量**设置为`max-low`。
+在**完整切片表达式中只有第一个索引值（low）可以省略**；它默认为`0`
+
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var array = [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	s1 := array[:5:6]
+	fmt.Printf("s1: %v, cap(s1): %d\n", s1, cap(s1)) // s1: [1 2 3 4 5], cap(s1): 6
+	s2 := array[4:6:10]
+	fmt.Printf("s2: %v, cap(s2): %d", s2, cap(s2))  // s2: [5 6], cap(s2): 6
+}
+```
+**完整切片表达式需要满足的条件是`0 <= low <= high <= max <= cap(a)`，
+其他条件和简单切片表达式相同。**
+
+## 2.6 make函数构造切片
+如果需要动态的创建一个切片，我们就需要使用内置的make()函数，格式如下
+```
+make([]T, size, cap)
+```
+* `T`:切片的元素类型
+* `size`:切片中元素的数量
+* `cap`:切片的容量, 默认值为`size`
+
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	slice := make([]int, 10, 20)
+	fmt.Printf("slice: %v, len(slice): %d, cap(slice):%d\n", slice, len(slice), cap(slice))  // slice: [0 0 0 0 0 0 0 0 0 0], len(slice): 10, cap(slice):20
+}
+```
+上面代码中`slice`的内部存储空间已经分配了`20`个，但实际上只用了`10`个。
+容量并不会影响当前元素的个数，所以`len(slice)`返回10，
+`cap(slice)`则返回该切片的容量20。
+
+## 2.7 切片本质
+切片的本质就是**对底层数组的封装**，它包含了三个信息：
+`底层数组的指针`、`切片的长度（len）`和`切片的容量（cap）`
+
+例如:`a := [8]int{0, 1, 2, 3, 4, 5, 6, 7}`，切片`s1 := a[:5]`，
+相应示意图如下
+![](.img/slice_01.png)
+切片`s2 := a[3:6]`，相应示意图如下
+![](.img/slice_02.png)
+
+**切片不能直接比较**
+> 切片之间是不能比较的，我们不能使用`==`操作符来判断两个切片是否含有全部相等元素。
+> 切片唯一合法的比较操作是和`nil`比较。 
+> 一个`nil`值的切片并没有底层数组，一个`nil`值的切片的长度和容量都是`0`。
+> 但是我们不能说一个长度和容量都是`0`的切片一定是`nil`
+
+* 切片唯一合法比较是与`nil`进行比较。
+* `nil`切片的长度和容量都是`0`
+* 长度和容量都是`0`的切片不一定是`nil`且片
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s1 []int         //len(s1)=0;cap(s1)=0;s1==nil
+	s2 := []int{}        //len(s2)=0;cap(s2)=0;s2!=nil
+	s3 := make([]int, 0) //len(s3)=0;cap(s3)=0;s3!=nil
+
+	fmt.Printf("len(s1): %d, cap(s1): %d, s1 is nil: %t\n", len(s1), cap(s1), s1 == nil)  // len(s1): 0, cap(s1): 0, s1 is nil: true
+	fmt.Printf("len(s2): %d, cap(s2): %d, s2 is nil: %t\n", len(s2), cap(s2), s2 == nil)  // len(s2): 0, cap(s2): 0, s2 is nil: false
+	fmt.Printf("len(s3): %d, cap(s3): %d, s3 is nil: %t\n", len(s3), cap(s3), s3 == nil)  // len(s3): 0, cap(s3): 0, s3 is nil: false
+}
+```
+
+**所以要判断一个切片是否是空的，要是用`len(s) == 0`来判断，不应该使用`s == nil`来判断**
+
+## 2.8 再谈引用类型
+切片是一个引用类型数据，赋值和参数传递不会完整复制底层数据，会共用同一个底层数组
+```go
+package main
+
+import "fmt"
+
+func main() {
+	s1 := make([]int, 3) //[0 0 0]
+	s2 := s1             // 将s1直接赋值给s2，s1和s2共用一个底层数组
+	s2[0] = 100
+	fmt.Println(s1)  // [100 0 0]
+	fmt.Println(s2)  // [100 0 0]
+}
+```
+
+**切片遍历**
+> 切片的遍历方式和数组是一致的，支持索引遍历和for range遍历
+```go
+package main
+
+import "fmt"
+
+func main() {
+	s := []int{1, 3, 5}
+
+	for i := 0; i < len(s); i++ {
+		fmt.Println(i, s[i])
+	}
+
+	for index, value := range s {
+		fmt.Println(index, value)
+	}
+}
+```
 # 三 map
 
 
