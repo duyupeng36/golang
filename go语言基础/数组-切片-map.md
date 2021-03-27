@@ -581,6 +581,182 @@ func main() {
 	}
 }
 ```
+
+## 2.9 append函数
+为切片添加元素时，使用内置函数`append`就可完成.
+
+`Go`语言的内建函数`append()`可以为切片动态添加元素。 
+可以一次添加一个元素，可以添加多个元素，也可以添加另一个切片中的元素(后面加`...`)
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s []int
+	s = append(s, 1)        // 添加一个元素
+	fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
+	s = append(s, 2, 3, 4)  // 添加三个元素
+	fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
+	s2 := []int{5, 6, 7}
+	s = append(s, s2...)  // 添加另一个切片的元素
+	fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
+}
+```
+* 通过`var`声明的零值切片可以在`append()`函数直接使用，无需初始化
+* 每个**切片会指向一个底层数组**，这个数组的容量够用就添加新增元素。
+  当底层数组**不能容纳新增的元素**时，切片就会自动按照一定的策略进行“**扩容**”，
+  此时该**切片指向的底层数组就会更换**。“扩容”操作往往发生在`append()`函数调用时，
+  所以我们通常都需要用**原变量接收`append`函数的返回值**
+
+**切片自动扩容扩容**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var numSlice []int
+	for i := 0; i < 10; i++ {
+		numSlice = append(numSlice, i)
+		fmt.Printf("%v  len:%d  cap:%d  ptr:%p\n", numSlice, len(numSlice), cap(numSlice), numSlice)
+	}
+}
+```
+![](.img/切片扩容.png)
+
+* `append()`函数将元素追加到切片的最后并返回该切片。
+* 切片`numSlice`的容量按照`1，2，4，8，16`这样的规则自动进行扩容，
+  每次扩容后都是扩容前的`2`倍。
+
+**扩容策略**
+![](.img/切片扩容源码.png)
+
+* 首先判断，如果新申请容量(`cap`)大于`2`倍的旧容量(`old.cap`，
+  最终容量(`newcap`)就是新申请的容量(`cap`)。
+* 否则判断，如果旧切片的长度小于`1024`，则最终容量(`newcap`)就是旧容量
+  (`old.cap`)的两倍，即(`newcap=doublecap`)
+* 否则判断，如果旧切片长度大于等于`1024`，则最终容量(`newcap`)从旧容量
+  (`old.cap`)开始循环增加原来的`1/4`，即(`newcap=old.cap`,`for {newcap += newcap/4}`)
+  直到最终容量(`newcap`)大于等于新申请的容量(`cap`)，即(`newcap >= cap`)
+* 如果最终容量(`cap`)计算值溢出，则最终容量(`cap`)就是新申请容量(`cap`)
+
+需要注意的是，切片扩容还会**根据切片中元素的类型不同而做不同的处理**，
+比如`int`和`string`类型的处理方式就不一样。
+
+## 2.10 copy复制
+切片是引用类型，如果将切片赋值给另一个遍历，会共用一个底层数组。
+修改一个另一个也会发生变化，业务中可能会涉及需要赋值一个切片出来的情况。
+可以使用`copy`函数复制一个全新的不同底层数组的切片。
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := []int{1, 2, 3, 4, 5}
+	b := a
+	fmt.Println(a) //[1 2 3 4 5]
+	fmt.Println(b) //[1 2 3 4 5]
+	b[0] = 1000
+	fmt.Println(a) //[1000 2 3 4 5]
+	fmt.Println(b) //[1000 2 3 4 5]
+}
+```
+* 将切片`a`赋值给变量`b`，那么`a`和`b`共用一个底层数组。
+* 任意修改`a`和`b`中的一个，都会造成另一个切片数据的变化。
+
+`Go`语言内建的`copy()`函数可以迅速地将一个切片的数据
+复制到另外一个切片空间中，`copy()`函数的使用格式如下：
+```
+copy(destSlice, srcSlice []T)
+```
+* `srcSlice`: 数据来源切片
+* `destSlice`: 目标切片
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := []int{1, 2, 3, 4, 5}
+	c := make([]int, 5, 5)
+	copy(c, a)     //使用copy()函数将切片a中的元素复制到切片c
+	fmt.Println(a) //[1 2 3 4 5]
+	fmt.Println(c) //[1 2 3 4 5]
+	c[0] = 1000
+	fmt.Println(a) //[1 2 3 4 5]
+	fmt.Println(c) //[1000 2 3 4 5]
+
+}
+```
+## 2.11 删除切片中的元素
+Go语言中并没有删除切片元素的专用方法，我们可以使用切片本身的特性来删除元素
+```
+a = append(a[:index], a[index+1:]...)
+```
+* 删除切片`a`中索引为`index`的元素
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	// 从切片中删除元素
+	a := []int{30, 31, 32, 33, 34, 35, 36, 37}
+	fmt.Println(a)  // [30 31 32 33 34 35 36 37]
+	// 要删除索引为2的元素
+	a = append(a[:2], a[3:]...)
+	fmt.Println(a)  // [30 31 33 34 35 36 37]
+}
+```
+
+**再谈切片本质**
+```go
+package main
+
+import "fmt"
+
+func main() {
+    a := [...]int{30, 31, 32, 33, 34, 35, 36, 37}
+    s := a[:]
+    fmt.Printf("%p ", s)  // 0xc0000c4040
+    fmt.Println(s, len(s), cap(s))  //  [30 31 32 33 34 35 36 37] 8 8
+  
+    s = append(s[:2], s[3:]...)
+    fmt.Printf("%p ", s)  // 0xc0000c4040
+    fmt.Println(s, len(s), cap(s))  // [30 31 33 34 35 36 37] 7 8
+    fmt.Println(a)  // [30 31 33 34 35 36 37 37]
+}
+```
+* 切片不保存值，只是在底层数组之上封装了一个`指针、长度、容量`来操作底层数组
+* 删除切片中的元素，最终是在移动底层数组的元素。
+
+**练习**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var a = make([]int, 5, 10)
+	for i := 0; i < 10; i++ {
+		a = append(a, i)
+	}
+	fmt.Println(a) // [0 0 0 0 0 0 1 2 3 4 5 6 7 8 9]
+}
+```
+
+**排序**
+```
+a := []int{3,1,7,5,0}
+sort.Ints(a)
+fmt.Println(a) // [0 1 3 5 7]
+```
+
+
 # 三 map
 
 

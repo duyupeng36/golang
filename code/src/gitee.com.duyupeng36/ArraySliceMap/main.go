@@ -124,13 +124,81 @@ func main() {
 	//fmt.Println(s1) //[100 0 0]
 	//fmt.Println(s2) //[100 0 0]
 
-	s := []int{1, 3, 5}
+	//s := []int{1, 3, 5}
+	//
+	//for i := 0; i < len(s); i++ {
+	//	fmt.Println(i, s[i])
+	//}
+	//
+	//for index, value := range s {
+	//	fmt.Println(index, value)
+	//}
 
-	for i := 0; i < len(s); i++ {
-		fmt.Println(i, s[i])
-	}
+	//var s []int
+	//s = append(s, 1)        // 添加一个元素
+	//fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
+	//s = append(s, 2, 3, 4)  // 添加三个元素
+	//fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
+	//s2 := []int{5, 6, 7}
+	//s = append(s, s2...)  // 添加另一个切片的元素
+	//fmt.Printf("s: %v, len(s): %d, cap(s): %d\n", s, len(s), cap(s))
 
-	for index, value := range s {
-		fmt.Println(index, value)
-	}
+	//var numSlice []int
+	//for i := 0; i < 10; i++ {
+	//	numSlice = append(numSlice, i)
+	//	fmt.Printf("%v  len:%d  cap:%d  ptr:%p\n", numSlice, len(numSlice), cap(numSlice), numSlice)
+	//}
+
+	//a := []int{1, 2, 3, 4, 5}
+	//b := a
+	//fmt.Println(a) //[1 2 3 4 5]
+	//fmt.Println(b) //[1 2 3 4 5]
+	//b[0] = 1000
+	//fmt.Println(a) //[1000 2 3 4 5]
+	//fmt.Println(b) //[1000 2 3 4 5]
+
+	//a := []int{1, 2, 3, 4, 5}
+	//c := make([]int, 5, 5)
+	//copy(c, a)     //使用copy()函数将切片a中的元素复制到切片c
+	//fmt.Println(a) //[1 2 3 4 5]
+	//fmt.Println(c) //[1 2 3 4 5]
+	//c[0] = 1000
+	//fmt.Println(a) //[1 2 3 4 5]
+	//fmt.Println(c) //[1000 2 3 4 5]
+
+	//// 从切片中删除元素
+	//a := []int{30, 31, 32, 33, 34, 35, 36, 37}
+	//fmt.Println(a)  // [30 31 32 33 34 35 36 37]
+	//// 要删除索引为2的元素
+	//a = append(a[:2], a[3:]...)
+	//fmt.Println(a)  // [30 31 33 34 35 36 37]
+
+	//a := [...]int{30, 31, 32, 33, 34, 35, 36, 37}
+	//s := a[:]
+	//fmt.Printf("%p ", &s[0])  // 0xc0000c4040
+	//fmt.Println(s, len(s), cap(s))  //  [30 31 32 33 34 35 36 37] 8 8
+	//
+	//s = append(s[:2], s[3:]...)
+	//fmt.Printf("%p ", &s[0])  // 0xc0000c4040
+	//fmt.Println(s, len(s), cap(s))  // [30 31 33 34 35 36 37] 7 8
+	//fmt.Println(a)  // [30 31 33 34 35 36 37 37]
+
+	//var a = make([]int, 5, 10)
+	//for i := 0; i < 10; i++ {
+	//	a = append(a, i)
+	//}
+	//fmt.Println(a)  // [0 0 0 0 0 0 1 2 3 4 5 6 7 8 9]
+
+	//a := []int{3,1,7,5,0}
+	//sort.Ints(a)
+	//fmt.Println(a) // [0 1 3 5 7]
+
+	a := [...]int{30, 31, 32, 33, 34, 35, 36, 37}
+
+	s := a[:]
+
+	s = append(s[:2], s[3:5]...)
+	fmt.Print(s)
+	fmt.Print(a)
+
 }
