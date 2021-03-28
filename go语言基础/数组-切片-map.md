@@ -756,9 +756,182 @@ sort.Ints(a)
 fmt.Println(a) // [0 1 3 5 7]
 ```
 
-
 # 三 map
 
+go语言也提供了映射关系容器`map`, 其内部使用散列表(`hash`)实现。
 
+### map的声明与使用
+`Go`语言中 `map`的定义语法如下
+```
+var map变量 map[KeyType]ValueType
+```
+* `KeyType`: 表示键的类型。
+* `ValueType`: 表示键对应的值的类型。
 
+`map`类型的变量默认初始值为`nil`，需要使用`make()`函数来分配内存。
+否则不能向`map`中存放数据
+```
+map变量 = make(map[KeyType]ValueType, [cap])
+```
+* `cap`表示`map`的容量，该参数虽然不是必须的，
+  但是我们应该在初始化`map`的时候就为其指定一个合适的容量, 
+  以防程序运行时动态扩容降低程序效率
+
+**获取map中保存的值**
+```
+value, bool_value = map变量[key]
+```
+* 可以通过`key`直接获取到`map`中保存的数据
+* `value`: `key`对应在`map`中的值
+* `bool_value`: `key`对应的值存在为`true`，否则为`false`
+
+**map示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var m map[string]int
+    m = make(map[string]int, 2)
+    m["age"] = 18
+    m["money"] = 200
+    fmt.Printf("%#v\n", m) // map[string]int{"age":18, "money":200}
+  
+    value, exists := m["hello"]
+    if exists {
+      fmt.Println(value, exists) // value默认为对应类型的零值
+    } else {
+      fmt.Println("该key不在map中")
+    }
+}
+```
+### map的遍历
+遍历`map`使用`for range`进行即可
+```go
+package main
+
+import "fmt"
+
+func main() {
+  scoreMap := make(map[string]int)
+  scoreMap["张三"] = 90
+  scoreMap["小明"] = 100
+  scoreMap["娜扎"] = 60
+  // 遍历key-value
+  for k, v := range scoreMap {
+    fmt.Println(k, v)
+  }
+  // 遍历key
+  for k := range scoreMap {
+    fmt.Println(k)
+  }
+}
+```
+### 删除键值
+使用`delete()`内建函数从`map`中删除一组键值对
+```
+delete(map, key)
+```
+* `map`: 要删除的`map`容器
+* `key`: 要删除的`key`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	scoreMap := make(map[string]int)
+	scoreMap["张三"] = 90
+	scoreMap["小明"] = 100
+	scoreMap["娜扎"] = 60
+	delete(scoreMap, "小明")
+	for k, v := range scoreMap {
+		fmt.Println(k, v)
+	}
+
+    delete(scoreMap, "hello")  // hello不存在，delete不操作
+}
+```
+
+* key不存在，delete函数不做任何操作
+
+**map的有序遍历**
+
+`go`语言中，必须取出map中的待排序的数据，排序完成后在将map中的值取出
+
+### 元素为map类型的切片
+切片中的元素为map类型,定义格式
+```
+var slice [] map[keyType]valueType
+```
+* 该方式声明了一个元素为map的切片
+
+**通过初始化列表初始化**
+```
+slice = []map[keyType]valueType{{key: value}, {key: value}}
+```
+**通过make函数初始化**
+```
+slice = make([] map[keyType]valueType, len, cap)  // 初始化切片
+slice[i] = make(map[keyType]valueType, cap) // 初始化map
+```
+
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var slice1 []map[string]int
+	slice1 = []map[string]int{{"dyp": 19}, {"dyy": 12}}  // 初始化列表初始化
+	fmt.Println(slice1)
+	var slice2 []map[string]int
+	slice2 = make([]map[string]int, 3)  // 初始化切片
+	slice2[0] = make(map[string]int, 3)  // 初始化map
+	slice2[0]["dyp"] = 19
+	slice2[0]["dyy"] = 12
+	fmt.Println(slice2)
+}
+```
+
+### 元素为切片的map
+当`map`中的一个`key`需要保存多个值时，需要将`key`对应的`value`做成一个切片
+
+**map中值为切片类型声明**
+```
+var sliceMap1 map[keyType][]Type
+```
+* `keyType`: `map`的key
+* `[]Type`: `value`的类型
+
+**通过初始化列表初始化**
+```
+sliceMap1 = map[keyType][]Type{"key": {value1, value2, ..., value_n}}
+```
+**通过make初始化**
+```
+sliceMap1 = make(map[keyType][]Type, cap) // 先初始化map
+sliceMap1["key"] = make([]Type, len, cap)  // 在初始化切片
+```
+**示例**
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var sliceMap1 map[string][]int
+	sliceMap1 = map[string][]int{"北京": {1, 2, 3}, "上海": {4, 5, 6}}  // 初始化列表初始化
+	fmt.Println(sliceMap1)
+	
+	var sliceMap2 map[string][]int
+	sliceMap2 = make(map[string][]int, 3) // 先初始化map
+	sliceMap2["北京"] = make([]int, 0, 3)  // 在初始化切片
+	sliceMap2["北京"] = append(sliceMap2["北京"], 1, 2, 3)  // 向切片添加值
+	fmt.Println(sliceMap2)
+}
+```
 

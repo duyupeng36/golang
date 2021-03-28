@@ -193,12 +193,55 @@ func main() {
 	//sort.Ints(a)
 	//fmt.Println(a) // [0 1 3 5 7]
 
-	a := [...]int{30, 31, 32, 33, 34, 35, 36, 37}
+	//a := [...]int{30, 31, 32, 33, 34, 35, 36, 37}
+	//
+	//s := a[:]
+	//
+	//s = append(s[:2], s[3:5]...)
+	//fmt.Print(s)
+	//fmt.Print(a)
 
-	s := a[:]
+	//var m map[string]int
+	//m = make(map[string]int, 2)
+	//m["age"] = 18
+	//m["money"] = 200
+	//fmt.Printf("%#v\n", m) // map[string]int{"age":18, "money":200}
+	//
+	//value, exists := m["hello"]
+	//if exists{
+	//	fmt.Println(value, exists)  // value默认为对应类型的零值
+	//} else {
+	//	fmt.Println("该key不在map中")
+	//}
 
-	s = append(s[:2], s[3:5]...)
-	fmt.Print(s)
-	fmt.Print(a)
+	//scoreMap := make(map[string]int)
+	//scoreMap["张三"] = 90
+	//scoreMap["小明"] = 100
+	//scoreMap["娜扎"] = 60
+	//delete(scoreMap, "小明")
+	//for k, v := range scoreMap {
+	//	fmt.Println(k, v)
+	//}
+	//
+	//delete(scoreMap, "hello")  // hello不存在，delete不操作
 
+	//var slice1 []map[string]int
+	//slice1 = []map[string]int{{"dyp": 19}, {"dyy": 12}}  // 初始化列表初始化
+	//fmt.Println(slice1)
+	//var slice2 []map[string]int
+	//slice2 = make([]map[string]int, 3)  // 初始化切片
+	//slice2[0] = make(map[string]int, 3)  // 初始化map
+	//slice2[0]["dyp"] = 19
+	//slice2[0]["dyy"] = 12
+	//fmt.Println(slice2)
+
+	var sliceMap1 map[string][]int
+	sliceMap1 = map[string][]int{"北京": {1, 2, 3}, "上海": {4, 5, 6}} // 初始化列表初始化
+	fmt.Println(sliceMap1)
+
+	var sliceMap2 map[string][]int
+	sliceMap2 = make(map[string][]int, 3)              // 先初始化map
+	sliceMap2["北京"] = make([]int, 0, 3)                // 在初始化切片
+	sliceMap2["北京"] = append(sliceMap2["北京"], 1, 2, 3) // 向切片添加值
+	fmt.Println(sliceMap2)
 }
