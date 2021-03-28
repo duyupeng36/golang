@@ -68,7 +68,7 @@ func main() {
 
 	//var s1 [] int   // 声明一个切片
 	//fmt.Println(s1 == nil)  // true
-	//// 在golang中nil代表了pointer, channel, func, interface, map 或者 slice 的零值，类似与c语言中的空指针.
+	//// 在golang中nil代表了pointer, channel, Function, interface, map 或者 slice 的零值，类似与c语言中的空指针.
 	//var s2 = []int{1,2,3,4}
 	//fmt.Println(s2 == nil)  //false
 
