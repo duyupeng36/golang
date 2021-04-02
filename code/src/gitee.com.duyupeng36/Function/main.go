@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+import "math/rand"
 
 // 定义一个函数，返回两个数的和
 func add(x, y int) int {
@@ -170,9 +174,14 @@ func main() {
 	//	fmt.Println("hello 匿名函数2")
 	//}()
 
-	fmt.Println(factorial(13))
-	fibolach(10)
-	fmt.Println(count[0:10])
+	//fmt.Println(factorial(13))
+	//fibolach(10)
+	//fmt.Println(count[0:10])
+
+	rand.Seed(time.Now().UnixNano())
+	// 产生随机数
+	fmt.Println(rand.Int())    // 产生整型随机数
+	fmt.Println(rand.Intn(10)) // 产生10以内的随机数
 }
 
 //var a int = 10
