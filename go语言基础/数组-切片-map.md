@@ -779,7 +779,7 @@ map变量 = make(map[KeyType]ValueType, [cap])
 
 **获取map中保存的值**
 ```
-value, bool_value = map变量[key]
+value, bool_value := map变量[key]
 ```
 * 可以通过`key`直接获取到`map`中保存的数据
 * `value`: `key`对应在`map`中的值
