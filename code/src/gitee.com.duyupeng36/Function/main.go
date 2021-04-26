@@ -119,6 +119,36 @@ func fibolach(x int) int64 {
 		return count[x-1] + count[x-2]
 	}
 }
+
+func f1(f func()) {
+	fmt.Println("this is function f1")
+	f()
+}
+
+func f2(x, y int) {
+	fmt.Println("this is function f2")
+	fmt.Println(x + y)
+}
+
+// 将f2函数在f1函数中进行调用，需要对f2函数进行函数定制
+
+func f3(f func(int, int), x, y int) func() {
+
+	return func() {
+		f(x, y)
+	}
+}
+
+// 也可以对函数f2进行如下包装
+func f4(f func(int, int)) func(int, int) func() {
+	ret := func(x, y int) func() {
+		return func() {
+			f(x, y)
+		}
+	}
+	return ret
+}
+
 func main() {
 	//z := add(10, 20) // 调用函数
 	//fmt.Println(z)
@@ -182,6 +212,14 @@ func main() {
 	// 产生随机数
 	fmt.Println(rand.Int())    // 产生整型随机数
 	fmt.Println(rand.Intn(10)) // 产生10以内的随机数
+
+	function := f3(f2, 10, 20)
+	f1(function)
+
+	f := f4(f2)
+
+	ff := f(10, 20)
+	f1(ff)
 }
 
 //var a int = 10
