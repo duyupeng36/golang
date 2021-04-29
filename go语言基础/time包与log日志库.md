@@ -532,4 +532,153 @@ func main() {
 }
 ```
 
-# 日志库简单实现
+# log标准日志库
+
+无论是软件开发的调试阶段还是软件上线之后的运行阶段，
+日志一直都是非常重要的一个环节，我们也应该养成在程序中记录日志的好习惯。
+
+`Go`语言内置的`log`包实现了简单的日志服务
+
+## 一 log标准日志库简单使用(标准logger对象)
+`log`包定义了`Logger`类型，该类型提供了一些格式化输出的方法。
+本包也提供了一个预定义的“标准”`logger`，可以通过调用函数
+* `Print`系列(`Print|Printf|Println`)
+* `Fatal`系列(`Fatal|Fatalf|Fatalln`)
+  * `Fatal`系列函数会在写入日志信息后调用`os.Exit(1)`
+* `Panic`系列(`Panic|Panicf|Panicln`)
+  * `Panic`系列函数会在写入日志信息后`panic`。
+  
+来使用，比自行创建一个logger对象更容易使用，例如下面的示例代码
+直接通过`log`包来使用
+
+```go
+package main
+
+import (
+	"log"
+)
+
+func main() {
+	log.Println("这是一条很普通的日志。")
+	v := "很普通的"
+	log.Printf("这是一条%s日志。\n", v)
+	log.Fatalln("这是一条会触发fatal的日志。")
+	log.Panicln("这是一条会触发panic的日志。")
+}
+```
+### 1.1 标准logger的配置
+默认情况下的`logger`只会提供日志的时间信息，
+但是很多情况下我们希望得到更多信息，比如记录该日志的文件名和行号等。
+`log`标准库中为我们提供了定制这些设置的方法。
+#### flag选项配置
+```
+func Flags() int
+func SetFlags(flag int)
+```
+* `log`标准库中的`Flags`函数会返回标准`logger`的输出配置
+* `SetFlags`函数用来设置标准`logger`的输出配置
+
+`log`包中的选项常量
+```
+const (
+    // 控制输出日志信息的细节，不能控制输出的顺序和格式。
+    // 输出的日志在每一项后会有一个冒号分隔：例如2009/01/23 01:23:23.123123 /a/b/c/d.go:23: message
+    Ldate         = 1 << iota     // 日期：2009/01/23
+    Ltime                         // 时间：01:23:23
+    Lmicroseconds                 // 微秒级别的时间：01:23:23.123123（用于增强Ltime位）
+    Llongfile                     // 文件全路径名+行号： /a/b/c/d.go:23
+    Lshortfile                    // 文件名+行号：d.go:23（会覆盖掉Llongfile）
+    LUTC                          // 使用UTC时间
+    LstdFlags     = Ldate | Ltime // 标准logger的初始值
+)
+```
+**使用配置：flag选项配置示例**
+```
+log.SetFlags(log.Llongfile|log.Lmicroseconds|log.Ldate)
+```
+
+#### prefix日志前缀配置
+`log`标准库中还提供了关于日志信息前缀的两个方法：
+```
+func Prefix() string
+func SetPrefix(prefix string)
+```
+* `Prefix`函数用来查看标准`logger`的输出前缀
+* `SetPrefix`函数用来设置输出前缀。
+
+**使用配置：前缀配置示例**
+```
+log.SetPrefix("prefix")
+```
+* 前缀方便之后对日志信息进行检索和处理
+
+#### 日志输出位置配置
+```
+func SetOutput(w io.Writer)
+```
+`SetOutput`函数用来设置标准`logger`的输出目的地，
+默认是标准错误输出。
+
+**配置输出到文件**
+```go
+package main
+
+import "fmt"
+import "log"
+import "os"
+
+func main() {
+	logFile, err := os.OpenFile("./xx.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Println("open log file failed, err:", err)
+		return
+	}
+	log.SetOutput(logFile)
+	log.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
+	log.Println("这是一条很普通的日志。")
+	log.SetPrefix("prefix")
+	log.Println("这是一条很普通的日志。")
+}
+```
+如果你要使用标准的`logger`，我们通常会把上面的配置操作写到`init`函数中
+```go
+package main
+
+import "fmt"
+import "log"
+import "os"
+
+func init() {
+	logFile, err := os.OpenFile("./xx.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Println("open log file failed, err:", err)
+		return
+	}
+	log.SetOutput(logFile)
+	log.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
+}
+```
+
+## 二 创建logger
+`log`标准库中还提供了一个创建新`logger`对象的构造函数`New`，
+支持我们创建自己的`logger`示例。`New`函数的签名
+```
+func New(out io.Writer, prefix string, flag int) *Logger
+```
+* `out`设置日志信息写入的目的地
+* `prefix`前缀
+* `flag`定义日志的属性（时间、文件等等）。
+
+**使用示例**
+
+```go
+package main
+
+import "log"
+import "os"
+
+func main() {
+	logger := log.New(os.Stdout, "<New>", log.Lshortfile|log.Ldate|log.Ltime)
+	logger.Println("这是自定义的logger记录的日志。")
+}
+```

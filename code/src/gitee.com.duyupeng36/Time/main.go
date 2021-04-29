@@ -57,9 +57,14 @@ func main() {
 	stringTime, _ := time.ParseInLocation("2006-01-02 3:04 PM", timeString, loc)
 	fmt.Println(stringTime)
 
-	timer := time.Tick(time.Second)
-	for i := range timer {
-		fmt.Println(i)
-	}
+	//timer := time.Tick(time.Second)
+	//for i := range timer {
+	//	fmt.Println(i)
+	//}
 
+	sub := time.Date(2021, 4, 29, 14, 0, 0, 0, loc).Sub(now)
+	fmt.Println(sub)
+	now = time.Now().UTC() // UTC只修改Location。
+	nextDay, _ := time.ParseInLocation("2006-01-02 15:05:05", "2021-04-30 13:42:50", time.Local)
+	fmt.Println(nextDay.Sub(now))
 }
