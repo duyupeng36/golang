@@ -541,7 +541,7 @@ func main() {
 
 ## 一 log标准日志库简单使用(标准logger对象)
 `log`包定义了`Logger`类型，该类型提供了一些格式化输出的方法。
-本包也提供了一个预定义的“标准”`logger`，可以通过调用函数
+本包也提供了一个预定义的“标准”`Logger`，可以通过调用函数
 * `Print`系列(`Print|Printf|Println`)
 * `Fatal`系列(`Fatal|Fatalf|Fatalln`)
   * `Fatal`系列函数会在写入日志信息后调用`os.Exit(1)`
@@ -567,7 +567,7 @@ func main() {
 }
 ```
 ### 1.1 标准logger的配置
-默认情况下的`logger`只会提供日志的时间信息，
+默认情况下的`Logger`只会提供日志的时间信息，
 但是很多情况下我们希望得到更多信息，比如记录该日志的文件名和行号等。
 `log`标准库中为我们提供了定制这些设置的方法。
 #### flag选项配置
@@ -575,8 +575,8 @@ func main() {
 func Flags() int
 func SetFlags(flag int)
 ```
-* `log`标准库中的`Flags`函数会返回标准`logger`的输出配置
-* `SetFlags`函数用来设置标准`logger`的输出配置
+* `log`标准库中的`Flags`函数会返回标准`Logger`的输出配置
+* `SetFlags`函数用来设置标准`Logger`的输出配置
 
 `log`包中的选项常量
 ```
@@ -603,7 +603,7 @@ log.SetFlags(log.Llongfile|log.Lmicroseconds|log.Ldate)
 func Prefix() string
 func SetPrefix(prefix string)
 ```
-* `Prefix`函数用来查看标准`logger`的输出前缀
+* `Prefix`函数用来查看标准`Logger`的输出前缀
 * `SetPrefix`函数用来设置输出前缀。
 
 **使用配置：前缀配置示例**
@@ -616,7 +616,7 @@ log.SetPrefix("prefix")
 ```
 func SetOutput(w io.Writer)
 ```
-`SetOutput`函数用来设置标准`logger`的输出目的地，
+`SetOutput`函数用来设置标准`Logger`的输出目的地，
 默认是标准错误输出。
 
 **配置输出到文件**
@@ -640,7 +640,7 @@ func main() {
 	log.Println("这是一条很普通的日志。")
 }
 ```
-如果你要使用标准的`logger`，我们通常会把上面的配置操作写到`init`函数中
+如果你要使用标准的`Logger`，我们通常会把上面的配置操作写到`init`函数中
 ```go
 package main
 
@@ -660,8 +660,8 @@ func init() {
 ```
 
 ## 二 创建logger
-`log`标准库中还提供了一个创建新`logger`对象的构造函数`New`，
-支持我们创建自己的`logger`示例。`New`函数的签名
+`log`标准库中还提供了一个创建新`Logger`对象的构造函数`New`，
+支持我们创建自己的`Logger`示例。`New`函数的签名
 ```
 func New(out io.Writer, prefix string, flag int) *Logger
 ```
@@ -678,7 +678,7 @@ import "log"
 import "os"
 
 func main() {
-	logger := log.New(os.Stdout, "<New>", log.Lshortfile|log.Ldate|log.Ltime)
-	logger.Println("这是自定义的logger记录的日志。")
+	Logger := log.New(os.Stdout, "<New>", log.Lshortfile|log.Ldate|log.Ltime)
+	Logger.Println("这是自定义的logger记录的日志。")
 }
 ```

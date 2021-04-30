@@ -1,0 +1,9 @@
+{
+  "loggerType": "file",
+  "level": "debug",
+  "logFilePath": "./",
+  "logFileName": "test.log",
+  "errorFileName": "test.log.err",
+  "maxSize": 10240
+}
+
