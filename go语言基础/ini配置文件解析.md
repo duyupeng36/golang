@@ -39,7 +39,7 @@ func loadIni(b []byte, s interface{}) (err error){
 	}
 
 	// 将第一个参数转为字符串，并按照换行符分隔
-	slice := strings.Split(string(b), "\r\n")
+	slice := strings.Split(string(b), "\recv\n")
 	fmt.Printf("%v\n", slice)
 	var structName string
 	for idx, line := range slice{
@@ -129,11 +129,11 @@ func loadIni(b []byte, s interface{}) (err error){
 }
 
 func main() {
-	var c Config
+	var recv Config
 	//var a int
 	file, _ := os.Open("./config.ini")
 	ret, _ := ioutil.ReadAll(file)
-	err := loadIni(ret, &c)
+	err := loadIni(ret, &recv)
 	if err != nil {
 		fmt.Printf("load ini file faild; err:%v\n", err)
 	}
@@ -143,7 +143,7 @@ func main() {
 	Username:%s
 	Password:%s
 	CharSet:%s
-`, c.MysqlConfig.Host, c.MysqlConfig.Port, c.MysqlConfig.Username, c.MysqlConfig.Password, c.MysqlConfig.CharSet)
+`, recv.MysqlConfig.Host, recv.MysqlConfig.Port, recv.MysqlConfig.Username, recv.MysqlConfig.Password, recv.MysqlConfig.CharSet)
 
 }
 ```

@@ -332,7 +332,7 @@ func main() {
 切片是引用类型，不支持直接比较，只能和`nil`比较
 
 在`golang`中`nil`代表了`pointer`, `channel`, `func`, `interface`, `map` 
-或者 `slice` 的零值，类似与`c`语言中的空指针.
+或者 `slice` 的零值，类似与`recv`语言中的空指针.
 
 ```go
 package main
@@ -681,13 +681,13 @@ import "fmt"
 
 func main() {
 	a := []int{1, 2, 3, 4, 5}
-	c := make([]int, 5, 5)
-	copy(c, a)     //使用copy()函数将切片a中的元素复制到切片c
+	recv := make([]int, 5, 5)
+	copy(recv, a)     //使用copy()函数将切片a中的元素复制到切片c
 	fmt.Println(a) //[1 2 3 4 5]
-	fmt.Println(c) //[1 2 3 4 5]
-	c[0] = 1000
+	fmt.Println(recv) //[1 2 3 4 5]
+	recv[0] = 1000
 	fmt.Println(a) //[1 2 3 4 5]
-	fmt.Println(c) //[1000 2 3 4 5]
+	fmt.Println(recv) //[1000 2 3 4 5]
 
 }
 ```
