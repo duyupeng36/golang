@@ -31,7 +31,7 @@ func myHandler(w http.ResponseWriter, r *http.Request) {
 	OpenSendFile(r.URL.String(), w)
 }
 
-func main() {
+func main0() {
 	// 注册回调函数
 	http.HandleFunc("/", myHandler)
 	// 绑定监听地址
