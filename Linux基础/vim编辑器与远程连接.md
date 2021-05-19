@@ -104,3 +104,32 @@
 ## 排版
 * 命令模式下输入: `gg=G` 自动排版
 
+
+# 远程连接
+
+## ssh
+
+远程连接: `ssh -p port username@host` 或者 `ssh -l username hostip`
+
+## 远程文件复制 scp
+
+|参数|含义|
+|:---:|:---:|
+|`RemoteUserName`|远程用户名|
+|`RemoteHostIp`|远程`ip`|
+|`RemoteFile`|远程文件，可带上路径|
+|`FileName`|拷贝到本地后的名字，可带上路径，不带路径拷贝到当前目录|
+
+**本地文件复制到远程**
+```
+scp FileName RemoteUserName@RemoteHostIp:RemoteFile  
+```
+* 如果复制目录请加上选项`-r`
+
+**远程文件复制到本地**
+```
+scp RemoteUserName@RemoteHostIp:RemoteFile FileName
+```
+* 如果复制目录请加上选项`-r`
+
+
