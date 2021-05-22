@@ -92,7 +92,7 @@ go语言特点:
 ## 4.7 [vim编辑器与远程连接](./Linux基础/vim编辑器与远程连接.md)
 
 
-# 五 数据库
+# 五 关系型数据库MySQL
 
 ## 5.1 [数据库的发展](./数据库/数据库发展.md)
 
@@ -113,3 +113,11 @@ go语言特点:
 ## 5.9 [Go操作MySQL](./数据库/Go操作MySQL.md)
 
 ## 5.10 [Go使用sqlx操作MySQL](./数据库/SQLX.md)
+
+## 5.11 [go-module依赖管理](./数据库/go-module依赖管理.md)
+
+# 六 beego框架
+
+## 6.1 [beego框架介绍](./beego框架/beego框架介绍.md)
+
+
