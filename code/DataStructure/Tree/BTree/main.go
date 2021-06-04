@@ -393,9 +393,5 @@ func main() {
 	//CreateBTree(&t, str)
 	root := CreateBTreeByPostOrderAndInOrder("GDBEFCA", "DGBAECF")
 	t.root = root
-	t.PreOrder(t.root)
-	fmt.Println()
-	t.InOrder(t.root)
-	fmt.Println()
-	t.PostOrder(t.root)
+	t.DisplayTree(t.root)
 }

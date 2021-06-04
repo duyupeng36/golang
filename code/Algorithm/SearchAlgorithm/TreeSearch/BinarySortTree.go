@@ -270,16 +270,3 @@ func (node *BinarySearchTreeNode) midOrder() {
 	// 打印右子树
 	node.Right.midOrder()
 }
-
-func main() {
-
-	var t *BinarySearchTree
-	t = NewBinarySearchTree()
-	values := []int64{9, 2, 3, 7, 1, 4, 10, 8, 6, 5}
-	for _, v := range values {
-		t.Add(v)
-	}
-
-	t.MidOrder()
-
-}
