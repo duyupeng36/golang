@@ -430,9 +430,9 @@ const (
     Hour                 = 60 * Minute
 )
 ```
-### 5.1 Add 加法(加时间间隔)
+### 5.1 addNode 加法(加时间间隔)
 ```
-func (t Time) Add(d Duration) Time
+func (t Time) addNode(d Duration) Time
 ```
 返回时间点`t+d`
 
@@ -448,7 +448,7 @@ func (t Time) Sub(u Time) Duration
 ```
 返回一个时间段`t-u`。如果结果超出了`Duration`可以表示的 *最大值/最小值*，
 将返回 *最大值/最小值* 。要获取时间点`t-d`（d为Duration），
-可以使用`t.Add(-d)`。
+可以使用`t.addNode(-d)`。
 
 ### 5.4 Time计算示例
 ```go
@@ -463,10 +463,10 @@ import (
 func main() {
 	now := time.Now()  // 获取当前本地时间
 	
-	afterHour := now.Add(time.Hour)  // 加 一小时
+	afterHour := now.addNode(time.Hour)  // 加 一小时
 	fmt.Println(afterHour)
 
-	beforeHour := now.Add(-time.Hour)  // 减 一小时
+	beforeHour := now.addNode(-time.Hour)  // 减 一小时
 	fmt.Println(beforeHour)
 
 	subTime := now.Sub(beforeHour)  // 减法

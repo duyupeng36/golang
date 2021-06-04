@@ -36,7 +36,7 @@ func f() {
 }
 
 func main() {
-	wg.Add(1)
+	wg.addNode(1)
 	go f()
 	<-time.After(time.Second * 3)  // 等待3秒
 	exit = true  // 退出条件置为真
@@ -79,7 +79,7 @@ func f() {
 }
 
 func main() {
-	wg.Add(1)
+	wg.addNode(1)
 	go f()
 	<-time.After(time.Second * 5)  // 等待3秒
 	exit <- true  // 写入退出
@@ -134,7 +134,7 @@ func f(ctx context.Context) {
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())  // 返回一个ctx对象和取消函数
-	wg.Add(1)
+	wg.addNode(1)
 	go f(ctx)
 	<-time.After(time.Second * 5)  // 等待3秒
 	cancel()  // 通知子goroutine关闭
@@ -252,7 +252,7 @@ func f(ctx context.Context) {
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background()) // 返回一个ctx对象和取消函数
-	wg.Add(1)
+	wg.addNode(1)
 	go f(ctx)
 	<-time.After(time.Second * 5) // 等待3秒
 	cancel()                      // 通知子goroutine关闭
@@ -287,7 +287,7 @@ var wg sync.WaitGroup
 
 func f(ctx context.Context) {
 	defer wg.Done()
-	wg.Add(1)
+	wg.addNode(1)
 	go func(ctx context.Context) {
 		defer wg.Done()
 		i := 0
@@ -317,10 +317,10 @@ func f(ctx context.Context) {
 }
 
 func main() {
-	d := time.Now().Add(time.Second * 5)
+	d := time.Now().addNode(time.Second * 5)
 	ctx, cancel := context.WithDeadline(context.Background(), d)  // 返回一个ctx对象和取消函数
 	defer cancel()  // 任何时候调用cancel
-	wg.Add(1)
+	wg.addNode(1)
 	go f(ctx)
 	//<-time.After(time.Second * 5)  // 等待3秒
 	//cancel()  // 通知子goroutine关闭
@@ -333,7 +333,7 @@ WithTimeout的函数签名如下：
 ```go
 func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
 ```
-`WithTimeout`返回`WithDeadline(parent, time.Now().Add(timeout))。`
+`WithTimeout`返回`WithDeadline(parent, time.Now().addNode(timeout))。`
 
 到都达到超时时间将取消此上下文将释放与其相关的资源，
 因此代码应该在此上下文中运行的操作完成后立即调用`cancel`，
@@ -353,7 +353,7 @@ var wg sync.WaitGroup
 
 func f(ctx context.Context) {
 	defer wg.Done()
-	wg.Add(1)
+	wg.addNode(1)
 	go func(ctx context.Context) {
 		defer wg.Done()
 		i := 0
@@ -383,11 +383,11 @@ func f(ctx context.Context) {
 }
 
 func main() {
-	//d := time.Now().Add(time.Second * 5)
+	//d := time.Now().addNode(time.Second * 5)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 5)  // 返回一个ctx对象和取消函数
 	defer cancel()
 
-	wg.Add(1)
+	wg.addNode(1)
 	go f(ctx)
 	//<-time.After(time.Second * 5)  // 等待3秒
 	//cancel()  // 通知子goroutine关闭
@@ -452,7 +452,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*50)
 	// 在系统的入口中设置trace code传递给后续启动的goroutine实现日志数据聚合
 	ctx = context.WithValue(ctx, TraceCode("TRACE_CODE"), "12512312234")
-	wg.Add(1)
+	wg.addNode(1)
 	go worker(ctx)
 	time.Sleep(time.Second * 5)
 	cancel() // 通知子goroutine结束

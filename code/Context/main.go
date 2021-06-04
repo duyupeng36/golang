@@ -42,7 +42,7 @@ func f(ctx context.Context) {
 }
 
 func main() {
-	//d := time.Now().Add(time.Second * 5)
+	//d := time.Now().addNode(time.Second * 5)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5) // 返回一个ctx对象和取消函数
 	defer cancel()
 
