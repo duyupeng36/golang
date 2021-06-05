@@ -89,7 +89,7 @@ NSQ是Go语言编写的一个开源的实时分布式内存消息队列，其性
 -e2e-processing-latency-percentile value
     message processing time percentiles (as float (0, 1.0]) to track (can be specified multiple times or comma separated '1.0,0.99,0.95', default none)
 -e2e-processing-latency-window-time duration
-    calculate end to end latency quantiles for this duration of time (ie: 60s would only show quantile calculations from the past 60 seconds) (default 10m0s)
+    calculate high to high latency quantiles for this duration of time (ie: 60s would only show quantile calculations from the past 60 seconds) (default 10m0s)
 -http-address string
     <addr>:<port> to listen on for HTTP clients (default "0.0.0.0:4151")
 -http-client-connect-timeout duration
