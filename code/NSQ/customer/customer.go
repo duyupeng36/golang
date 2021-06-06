@@ -1,4 +1,4 @@
-// nsq_consumer/main.go
+// nsq_consumer/prototype.go
 package main
 
 import (
