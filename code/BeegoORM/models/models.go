@@ -13,22 +13,6 @@ type User struct {
 	Email string
 }
 
-func (u *User) TableName() string {
-	return "main_user"
-}
-
-func (u *User) TableIndex() [][]string {
-	return [][]string{
-		[]string{"Id", "Name"},
-	}
-}
-
-func (u *User) TableUnique() [][]string {
-	return [][]string{
-		[]string{"Name", "Email"},
-	}
-}
-
 func init() {
 	// set default database
 	orm.RegisterDataBase("default", "mysql", "root:dyp1996@tcp(127.0.0.1:3306)/beego?charset=utf8&loc=Local")

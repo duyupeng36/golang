@@ -4,13 +4,25 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"log"
+	"time"
 )
 
 // Model Struct
 
 type User struct {
-	Id   int    `orm:"pk;auto"`
-	Name string `orm:"size(100)"`
+	Id       int    `orm:"pk;auto"`
+	Name     string `orm:"size(100)"`
+	Email    string `orm:"size(255)"`
+	Password string `orm:"size(255)"`
+}
+
+type Article struct {
+	Id       int       `orm:"pk;auto"`
+	ArtiName string    `orm:"size(20)"`                                   // 文章名称
+	Atime    time.Time `orm:"auto_now;type(datetime)"`                    // 修改时间
+	Acount   int       `orm:"default(0);null"`                            // 阅读量
+	Acontent string    `orm:"size(500)"`                                  // 内容
+	Aimg     string    `orm:"size(100);default(/static/img/default.jpg)"` // 文章图片
 }
 
 func init() {
@@ -23,7 +35,7 @@ func init() {
 	} // 连接数据库，给定一个别名
 
 	// register model
-	orm.RegisterModel(new(User)) // 注册表到orm
+	orm.RegisterModel(new(User), new(Article)) // 注册表到orm
 
 	// create table
 	err = orm.RunSyncdb("default", false, true)

@@ -86,6 +86,21 @@ func ExecuteSQL(sql string) {
 	}
 }
 
+func InsertMany() {
+	o := orm.NewOrm()
+	users := []models.User{
+		{Name: "slene"},
+		{Name: "astaxie"},
+		{Name: "unknown"},
+	}
+	successNums, err := o.InsertMulti(100, users)
+	if err != nil {
+		log.Fatalln("插入失败，成功条数: ", successNums)
+		return
+	}
+	log.Println("成功条数: ", successNums)
+}
+
 func main() {
 	//Insert(&models.User{
 	//	Name: "dyp",
@@ -97,5 +112,6 @@ func main() {
 	//	Name: "dyp",
 	//})
 	//SelectWthRe()
-	ExecuteSQL("select * from user")
+	//ExecuteSQL("select * from user")
+	InsertMany()
 }

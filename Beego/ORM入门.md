@@ -95,8 +95,8 @@ import (
 	"main/models"
 )
 
-func Insert(u *models.User)  {
-	o := orm.NewOrm()  // 获取default数据库
+func Insert(u *models.User) {
+	o := orm.NewOrm() // 获取default数据库
 
 	// 插入数据库
 	id, err := o.Insert(u)
@@ -104,10 +104,25 @@ func Insert(u *models.User)  {
 		log.Fatalln("插入数据失败，失败原因：", err)
 		return
 	}
-	log.Print("插入数据成功，返回数据id为：",id)
+	log.Print("插入数据成功，返回数据id为：", id)
 }
 
-func Select(name string) (u *models.User, err error){
+func InsertMany() {
+	o := orm.NewOrm()
+	users := []models.User{
+		{Name: "slene"},
+		{Name: "astaxie"},
+		{Name: "unknown"},
+	}
+	successNums, err := o.InsertMulti(100, users)
+	if err != nil {
+		log.Fatalln("插入失败，成功条数: ", successNums)
+		return
+	}
+	log.Println("成功条数: ", successNums)
+}
+
+func Select(name string) (u *models.User, err error) {
 	o := orm.NewOrm()
 	u = &models.User{Name: name}
 	err = o.Read(u, "name")
@@ -118,7 +133,7 @@ func Select(name string) (u *models.User, err error){
 	return
 }
 
-func Update(oldName, newName string)  {
+func Update(oldName, newName string) {
 	o := orm.NewOrm()
 	u, err := Select(oldName)
 	if err != nil {
@@ -151,10 +166,10 @@ func Delete(name string) {
 **相关函数介绍**
 1. 获取默认数据库: `o := orm.NewOrm()`
    
-2. 插入数据: `o.Insert(md interface{})`
+2. 插入数据: `o.Insert(md interface{})/o.InsertMulti(bulk int, mds interface{})`
     * `md`: 数据对象指针
     * 返回值
-      * 插入数据的id
+      * 插入数据的`id`/成功条数
       * 错误，出现错误，插入失败
     
 3. 查询数据: `o.Read(md interface{}, cols ...string)`
