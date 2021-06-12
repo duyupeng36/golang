@@ -207,14 +207,10 @@ go语言特点:
 ### 9.5.3 [策略模式](设计模式/行为模式/策略模式.md)
 ### 9.5.4 [模板方法模式](设计模式/行为模式/模板方法模式.md)
 
-
-
-
-
 # 十 Beego
 ## 10.1 [go model](Beego/go-module依赖管理.md)
 ## 10.2 [context](Beego/context.md)
 ## 10.3 [beego框架简介](Beego/beego框架介绍.md)
 ## 10.4 [路由配置](Beego/路由配置.md)
 ## 10.5 [ORM入门](Beego/ORM入门.md)
-## 10.6 [ORM模型定义](Beego/ORM模型定义.md)
+## 10.6 [ORM单表模型定义](Beego/ORM单表模型定义.md)

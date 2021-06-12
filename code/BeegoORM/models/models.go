@@ -8,8 +8,25 @@ import (
 // Model Struct
 
 type User struct {
-	Id   int    // 默认主键
-	Name string `orm:"size(100)"`
+	Id    int    // 默认主键
+	Name  string `orm:"size(100)"`
+	Email string
+}
+
+func (u *User) TableName() string {
+	return "main_user"
+}
+
+func (u *User) TableIndex() [][]string {
+	return [][]string{
+		[]string{"Id", "Name"},
+	}
+}
+
+func (u *User) TableUnique() [][]string {
+	return [][]string{
+		[]string{"Name", "Email"},
+	}
 }
 
 func init() {
