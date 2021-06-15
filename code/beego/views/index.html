@@ -70,11 +70,11 @@
             </table>
 
             <ul class="pagenation">
-                <li><a href="#">首页</a></li>
-                <li><a href="javascript:;">上一页 </a> </li>
-                <li> <a href="javascript:;">下一页</a></li>
-                <li><a href="#">末页</a></li>
-                <li>共5条记录/共5页/当前1页</li>
+                <li><a href="/?pageIndex=1">首页</a></li>
+                <li><a href="/?pageIndex={{pre .pageIndex}}">上一页 </a> </li>
+                <li> <a href="/?pageIndex={{next .pageIndex .page}}">下一页</a></li>
+                <li><a href="/?pageIndex={{.page}}">末页</a></li>
+                <li>共{{.count}}条记录/共{{.page}}页/当前{{.pageIndex}}页</li>
             </ul>
         </div>
     </div>

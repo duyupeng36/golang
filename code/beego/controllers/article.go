@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"log"
+	"math"
 	"path"
 	"time"
 )
@@ -13,18 +14,43 @@ type ArticleController struct {
 	beego.Controller
 }
 
-// List 后台首页 文章列表展示
+// List 后台首页 文章列表分页展示
 func (c *ArticleController) List() {
 	o := orm.NewOrm() // 获取默认数据库对象
 	var articles []models.Article
-	qs := o.QueryTable("article")
-	_, err := qs.All(&articles)
+	qs := o.QueryTable("article").OrderBy("-Atime")
+
+	pageSize := 1
+	count, err := qs.Count()                                   // 获取总共数据条数
+	page := int(math.Ceil(float64(count) / float64(pageSize))) // 每页展示5条数据，获取总页数
+
 	if err != nil {
 		c.Data["articles"] = articles
+		c.Data["count"] = count
+		c.Data["page"] = page
+		c.TplName = "index.html"
+		return
+	}
+
+	// 获取数据
+	pageIndex, err := c.GetInt("pageIndex")
+	if err != nil {
+		pageIndex = 1
+	} // 获取页码
+	start := (pageIndex - 1) * pageSize               // 获取起始位置
+	_, err = qs.Limit(pageSize, start).All(&articles) // 获取数据
+	if err != nil {
+		c.Data["articles"] = articles
+		c.Data["count"] = count
+		c.Data["page"] = page
+		c.Data["pageIndex"] = pageIndex
 		c.TplName = "index.html"
 		return
 	}
 	c.Data["articles"] = articles
+	c.Data["count"] = count
+	c.Data["page"] = page
+	c.Data["pageIndex"] = pageIndex
 	c.TplName = "index.html"
 }
 
